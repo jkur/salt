@@ -82,7 +82,7 @@ def _parse_pkg_meta(path):
         metaparser = parse_rpm
     elif __grains__['os_family'] in ('Arch'):
         metaparser = parse_pacman
-    elif __grains__['os_family'] in ('Debian'):
+    elif __grains__['os_family'].lower() in ('debian'):
         metaparser = parse_deb
     else:
         log.error('No metadata parser found for {0}'.format(path))

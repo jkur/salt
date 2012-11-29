@@ -32,7 +32,7 @@ def _detect_os():
     # TODO: Add pillar support for the apachectl location
     if __grains__['os_family'] == 'RedHat':
         return 'apachectl'
-    elif __grains__['os_family'] == 'Debian':
+    elif __grains__['os_family'].lower() == 'debian':
         return 'apache2ctl'
     else:
         return 'apachectl'

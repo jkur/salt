@@ -34,7 +34,7 @@ def get_zone():
         cmd = 'grep TIMEZONE /etc/rc.conf | grep -vE "^#"'
     elif 'RedHat' in __grains__['os_family']:
         cmd = 'grep ZONE /etc/sysconfig/clock | grep -vE "^#"'
-    elif 'Debian' in __grains__['os_family']:
+    elif 'debian' in __grains__['os_family'].lower():
         return open('/etc/timezone','r').read()
     out = __salt__['cmd.run'](cmd).split('=')
     ret = out[1].replace('"', '')
@@ -86,7 +86,7 @@ def set_zone(timezone):
         __salt__['file.sed']('/etc/rc.conf', '^TIMEZONE=.*', 'TIMEZONE="{0}"'.format(timezone))
     elif 'RedHat' in __grains__['os_family']:
         __salt__['file.sed']('/etc/sysconfig/clock', '^ZONE=.*', 'ZONE="{0}"'.format(timezone))
-    elif 'Debian' in __grains__['os_family']:
+    elif 'debian' in __grains__['os_family'].lower():
         open('/etc/timezone', 'w').write(timezone)
 
     return True
@@ -108,7 +108,7 @@ def get_hwclock():
     elif 'RedHat' in __grains__['os_family']:
         cmd = 'tail -n 1 /etc/adjtime'
         return __salt__['cmd.run'](cmd)
-    elif 'Debian' in __grains__['os_family']:
+    elif 'debian' in __grains__['os_family'].lower():
         cmd = 'grep "UTC=" /etc/default/rcS | grep -vE "^#"'
         out = __salt__['cmd.run'](cmd).split('=')
         if out[1] == 'yes':
@@ -136,7 +136,7 @@ def set_hwclock(clock):
         __salt__['file.sed']('/etc/rc.conf', '^HARDWARECLOCK=.*', 'HARDWARECLOCK="{0}"'.format(timezone))
     elif 'RedHat' in __grains__['os_family']:
         __salt__['file.sed']('/etc/sysconfig/clock', '^ZONE=.*', 'ZONE="{0}"'.format(timezone))
-    elif 'Debian' in __grains__['os_family']:
+    elif 'debian' in __grains__['os_family'].lower():
         if clock == 'UTC':
             __salt__['file.sed']('/etc/default/rcS', '^UTC=.*', 'UTC=yes')
         elif clock == 'localtime':

@@ -47,7 +47,7 @@ def get_locale():
         cmd = 'grep "^LOCALE" /etc/rc.conf | grep -vE "^#"'
     elif 'RedHat' in __grains__['os_family']:
         cmd = 'grep LANG /etc/sysconfig/i18n | grep -vE "^#"'
-    elif 'Debian' in __grains__['os_family']:
+    elif 'debian' in __grains__['os_family'].lower():
         cmd = 'grep LANG /etc/default/locale | grep -vE "^#"'
     out = __salt__['cmd.run'](cmd).split('=')
     ret = out[1].replace('"', '')
@@ -66,7 +66,7 @@ def set_locale(locale):
         __salt__['file.sed']('/etc/rc.conf', '^LOCALE=.*', 'LOCALE="{0}"'.format(locale))
     elif 'RedHat' in __grains__['os_family']:
         __salt__['file.sed']('/etc/sysconfig/i18n', '^LANG=.*', 'LANG="{0}"'.format(locale))
-    elif 'Debian' in __grains__['os_family']:
+    elif 'debian' in __grains__['os_family'].lower():
         __salt__['file.sed']('/etc/default/locale', '^LANG=.*', 'LANG="{0}"'.format(locale))
 
     return True

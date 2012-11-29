@@ -23,7 +23,7 @@ def __virtual__():
     '''
     Confirm this module is on a Debian based system
     '''
-    return 'pkg' if __grains__['os_family'] == 'Debian' else False
+    return 'pkg' if __grains__['os_family'].lower() == 'debian' else False
 
 
 def __init__(opts):

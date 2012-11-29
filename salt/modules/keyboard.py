@@ -33,7 +33,7 @@ def get_sys():
         cmd = 'grep KEYMAP /etc/rc.conf | grep -vE "^#"'
     elif 'RedHat' in __grains__['os_family']:
         cmd = 'grep LAYOUT /etc/sysconfig/keyboard | grep -vE "^#"'
-    elif 'Debian' in __grains__['os_family']:
+    elif 'debian' in __grains__['os_family'].lower():
         cmd = 'grep XKBLAYOUT /etc/default/keyboard | grep -vE "^#"'
     out = __salt__['cmd.run'](cmd).split('=')
     ret = out[1].replace('"', '')
@@ -52,7 +52,7 @@ def set_sys(layout):
         __salt__['file.sed']('/etc/rc.conf', '^KEYMAP=.*', 'KEYMAP={0}'.format(layout))
     elif 'RedHat' in __grains__['os_family']:
         __salt__['file.sed']('/etc/sysconfig/keyboard', '^LAYOUT=.*', 'LAYOUT={0}'.format(layout))
-    elif 'Debian' in __grains__['os_family']:
+    elif 'debian' in __grains__['os_family'].lower():
         __salt__['file.sed']('/etc/default/keyboard', '^XKBLAYOUT=.*', 'XKBLAYOUT={0}'.format(layout))
     return layout
 
